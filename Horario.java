@@ -1,10 +1,9 @@
 package principal;
 
 public class Horario {
-	public int dia, inicio;//, duracao;
-	private int l;//, r;
-	public float duracao;
-	private float r;
+	public int dia, inicio, duracao;
+	private int l, r;
+	
 	/* mapeamento de dias
 	 * 0 <=> segunda
 	 * 1 <=> terça
@@ -21,14 +20,13 @@ public class Horario {
 		this.r = 24 * this.dia + this.inicio + this.duracao;
 	}
 	
-	public Horario(int dia, int inicio, float duracao) {
+	public Horario(int dia, int inicio, int duracao) {
 		this.dia = dia;
 		this.inicio = inicio;
 		this.duracao = duracao;
 		
 		calcIntervalo();
 	}
-	
 	
 	@Override
 	public boolean equals(Object o) {
