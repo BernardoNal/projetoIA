@@ -64,6 +64,10 @@ public abstract class Caso extends CSP<Variable, Horario> {
 			add(nome + "_" + (SABADO + 1), SEGUNDA, SEGUNDA, 0, 0, (inicio + duracao) % 24);
 	}
 	
+	void addTarefaDia(String nome, int dia, float duracao) {
+		add(nome, dia, dia, 0, 24 - duracao, duracao);
+	}
+	
 	void addTarefa(String nome, float duracao) {
 		add(nome, SEGUNDA, SABADO, 0, 24 - duracao, duracao);
 	}
