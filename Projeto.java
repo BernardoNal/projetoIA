@@ -74,6 +74,19 @@ public class Projeto {
 			caso.addTarefa(nome, duracao);
 		}
 		
+		System.out.println("Para adicionar uma tarefa de um dia, digite o nome, o dia e a duração da tarefa.");
+		System.out.println("Para parar de adicionar tarefas, digite apenas 0");
+		while (true) {
+			String nome = in.next();
+			if (nome.equals("0"))
+				break;
+			
+			int dia = in.nextInt();
+			float duracao = in.nextFloat();
+			
+			caso.addTarefaDia(nome, dia, duracao);
+		}
+		
 		String[][] tabela = new String[48][6];
 		int largura = 3;
 		
