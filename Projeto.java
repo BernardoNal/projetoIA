@@ -56,15 +56,10 @@ public class Projeto {
 			if (nome.equals("0"))
 				break;
 			
-			int inicio = in.nextInt();
-			String duracao = in.next();
-			if(duracao.matches("-?\\d+")) {
-					caso.addTarefaDiaria(nome, inicio, Integer.parseInt(duracao));
-		}else
-					{caso.addTarefaDiariaF(nome, inicio, Float.parseFloat(duracao));
-					
-			};
+			float inicio = in.nextFloat();
+			float duracao = in.nextFloat();
 			
+			caso.addTarefaDiaria(nome, inicio, duracao);
 		}
 		
 		System.out.println("Para adicionar uma tarefa, digite o nome e a duração da tarefa.");
@@ -74,16 +69,9 @@ public class Projeto {
 			if (nome.equals("0"))
 				break;
 			
-			String duracao = in.next();
-			if(duracao.matches("-?\\d+")) {
-					
-					caso.addTarefa(nome,  Integer.parseInt(duracao));
-		}else
-					{caso.addTarefa(nome, Float.parseFloat(duracao));
-			};
+			float duracao = in.nextFloat();
 			
-			
-			//caso.addTarefa(nome, duracao);
+			caso.addTarefa(nome, duracao);
 		}
 		
 		String[][] tabela = new String[48][6];
@@ -108,9 +96,9 @@ public class Projeto {
 //				System.out.println("");
 				
 				largura = Math.max(largura, var.getName().length());
-				for (int i = horario.inicio * 2; i < horario.inicio * 2 + (horario.duracao * 2); i++) {
+				for (float i = horario.inicio * 2; i < horario.inicio * 2 + (horario.duracao * 2); i++) {
 					System.out.println((i % 48) + " " + (horario.dia + (i / 48)));
-					tabela[i % 48][horario.dia + (i / 48)] = var.getName(); 
+					tabela[(int)(i % 48)][(int)(horario.dia + (i / 48))] = var.getName(); 
 				}
 			}
 		}
