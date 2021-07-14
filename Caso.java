@@ -25,20 +25,20 @@ public abstract class Caso extends CSP<Variable, Horario> {
 					addConstraint(new NotEqualConstraint<>(var1, var2));
 	}
 	
-	void add(String nome, int dia_l, int dia_r, int hora_l, int hora_r, int duracao) {
+	void add(String nome, int dia_l, int dia_r, float hora_l, float hora_r, float duracao) {
 		Variable tarefa = new Variable(nome);
 		addVariable(tarefa);
 		
 		List<Horario> horarios = new ArrayList<>();
 		// segunda a sexta
 		for (int dia = dia_l; dia <= Math.min(SEXTA, dia_r); dia++) {
-			for (int hora = hora_l; hora <= hora_r; hora++) {
+			for (float hora = hora_l; hora <= hora_r; hora += 0.5) {
 				horarios.add(new Horario(dia, hora, duracao));
 			}
 		}
 		// sábado
 		if (dia_r == SABADO) {
-			for (int hora = hora_l; hora <= Math.min(hora_r, 24 - duracao); hora++) {
+			for (float hora = hora_l; hora <= Math.min(hora_r, 24 - duracao); hora += 0.5) {
 				horarios.add(new Horario(SABADO, hora, duracao));
 			}
 		}
@@ -52,61 +52,21 @@ public abstract class Caso extends CSP<Variable, Horario> {
 			}
 	}
 	
-	void add(String nome, int dia_l, int dia_r, int hora_l, int hora_r, float duracao) {
-		Variable tarefa = new Variable(nome);
-		addVariable(tarefa);
-		
-		List<Horario> horarios = new ArrayList<>();
-		// segunda a sexta
-		for (int dia = dia_l; dia <= Math.min(SEXTA, dia_r); dia++) {
-			for (int hora = hora_l; hora <= hora_r; hora++) {
-				horarios.add(new Horario(dia, hora, duracao));
-			}
-		}
-		// sábado
-		if (dia_r == SABADO) {
-			for (int hora = hora_l; hora <= Math.min(hora_r, 24 - duracao); hora++) {
-				horarios.add(new Horario(SABADO, hora, duracao));
-			}
-		}
-		
-		setDomain(tarefa, new Domain<>(horarios));
-		
-		for (Variable var : getVariables())
-			if (tarefa != var) {
-				addConstraint(new NotEqualConstraint<>(tarefa, var));
-				addConstraint(new NotEqualConstraint<>(var, tarefa));
-			}
-	}
-	
-	void addDisciplina(String nome, int dia, int inicio, int duracao) {
+	void addDisciplina(String nome, int dia, float inicio, float duracao) {
 		add(nome, dia, dia, inicio, inicio, duracao);
 	}
 	
-	void addTarefaDiaria(String nome, int inicio, int duracao) {
+	void addTarefaDiaria(String nome, float inicio, float duracao) {
 		for (int dia = SEGUNDA; dia <= SEXTA; dia++)
 			add(nome + "_" + dia, dia, dia, inicio, inicio, duracao);
-		add(nome + "_" + SABADO, SABADO, SABADO, inicio, inicio, duracao - ((inicio + duracao) / 24) * ((inicio + duracao) % 24));
-		if ((inicio + duracao) / 24 == 1)
-			add(nome + "_" + (SABADO+1 ), SEGUNDA, SEGUNDA, 0, 0, (inicio + duracao) % 24);
-	}
-	
-	void addTarefaDiariaF(String nome, int inicio, float duracao) {
-		for (int dia = SEGUNDA; dia <= SEXTA; dia++)
-			add(nome + "_" + dia, dia, dia, inicio, inicio, duracao);
-		add(nome + "_" + SABADO, SABADO, SABADO, inicio, inicio, duracao - ((inicio + duracao) / 24) * ((inicio + duracao) % 24));
-		if ((inicio + duracao) / 24 == 1)
+		add(nome + "_" + SABADO, SABADO, SABADO, inicio, inicio, duracao - ((int)(inicio + duracao) / 24) * ((inicio + duracao) % 24));
+		if ((int)(inicio + duracao) / 24 == 1)
 			add(nome + "_" + (SABADO + 1), SEGUNDA, SEGUNDA, 0, 0, (inicio + duracao) % 24);
 	}
 	
-	
-	void addTarefa(String nome, int duracao) {
-		add(nome, SEGUNDA, SABADO, 0, 23, duracao);
-		
-	}
-	
 	void addTarefa(String nome, float duracao) {
-		add(nome, SEGUNDA, SABADO, 0, 23, duracao);
+		add(nome, SEGUNDA, SABADO, 0, 24 - duracao, duracao);
 	}
+	
 	abstract void addDisciplinas();
 }
