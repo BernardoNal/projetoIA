@@ -1,7 +1,9 @@
 package principal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import aima.core.search.csp.CSP;
 import aima.core.search.csp.Domain;
@@ -15,6 +17,21 @@ public abstract class Caso extends CSP<Variable, Horario> {
 	public static final int QUINTA  = 3;
 	public static final int SEXTA   = 4;
 	public static final int SABADO  = 5;
+	
+	Map<String, Integer> map_tarefas = new HashMap<String, Integer>();
+	
+	int get_key(String nome) {
+		int key;
+		if (map_tarefas.get(nome) == null) {
+			key = 1;
+			map_tarefas.put(nome, 1);
+		} else {
+			key = map_tarefas.get(nome) + 1;
+			map_tarefas.remove(nome);
+			map_tarefas.put(nome, key);
+		}
+		return key;
+	}
 	
 	public Caso() {
 		addDisciplinas();
@@ -53,7 +70,7 @@ public abstract class Caso extends CSP<Variable, Horario> {
 	}
 	
 	void addDisciplina(String nome, int dia, float inicio, float duracao) {
-		add(nome, dia, dia, inicio, inicio, duracao);
+		add(nome + '_' + get_key(nome), dia, dia, inicio, inicio, duracao);
 	}
 	
 	void addTarefaDiaria(String nome, float inicio, float duracao) {
@@ -65,11 +82,12 @@ public abstract class Caso extends CSP<Variable, Horario> {
 	}
 	
 	void addTarefaDia(String nome, int dia, float duracao) {
-		add(nome, dia, dia, 0, 24 - duracao, duracao);
+		
+		add(nome + '_' + get_key(nome), dia, dia, 0, 24 - duracao, duracao);
 	}
 	
 	void addTarefa(String nome, float duracao) {
-		add(nome, SEGUNDA, SABADO, 0, 24 - duracao, duracao);
+		add(nome + '_' + get_key(nome), SEGUNDA, SABADO, 0, 24 - duracao, duracao);
 	}
 	
 	abstract void addDisciplinas();

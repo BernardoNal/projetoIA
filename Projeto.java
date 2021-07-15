@@ -13,6 +13,27 @@ import aima.core.search.csp.solver.inference.ForwardCheckingStrategy;
 import aima.core.search.csp.solver.*;
 
 public class Projeto {
+	public static String formatar_nome(String nome) {
+		for (int i = nome.length() - 1; i >= 0; i--)
+			if (nome.charAt(i) == '_')
+				return nome.substring(0, i);	
+		return null;
+	}
+	
+	public static void linha(int largura) {
+		for (int i = 0; i < 13; i++)
+			System.out.print("_");
+		System.out.print("___");
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < largura; j++)
+				System.out.print("_");
+			if (i < 5)
+				System.out.print("___");
+			else
+				System.out.print("__");
+		}
+		System.out.println("");
+	}
 	
 	public static void linha_barra(int largura) {
 		// horário
@@ -22,7 +43,10 @@ public class Projeto {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < largura; j++)
 				System.out.print("_");
-			System.out.print("_|_");
+			if (i < 5)
+				System.out.print("_|_");
+			else
+				System.out.print("_|");
 		}
 		System.out.println("");
 	}
@@ -88,7 +112,7 @@ public class Projeto {
 		}
 		
 		String[][] tabela = new String[48][6];
-		int largura = 3;
+		int largura = "segunda".length();
 		
 		//CspSolver<Variable, Horario> algoritmo = new BackjumpingBacktrackingSolver<>();
 		//CspSolver<Variable, Horario> algoritimo = new TreeCspSolver<>(); Não Funciona
@@ -97,8 +121,6 @@ public class Projeto {
 		CspSolver<Variable, Horario> algoritimo = new FlexibleBacktrackingSolver<Variable, Horario>().setAll();
 		Optional<Assignment<Variable, Horario>> solucao = algoritimo.solve(caso);
 		
-           
-       
 		if (solucao.isPresent()) {
 			for (Variable var : solucao.get().getVariables()) {
 				Horario horario = solucao.get().getValue(var);
@@ -110,45 +132,28 @@ public class Projeto {
 				
 				largura = Math.max(largura, var.getName().length());
 				for (float i = horario.inicio * 2; i < horario.inicio * 2 + (horario.duracao * 2); i++) {
-					System.out.println((i % 48) + " " + (horario.dia + (i / 48)));
-					tabela[(int)(i % 48)][(int)(horario.dia + (i / 48))] = var.getName(); 
+					//System.out.println((i % 48) + " " + (horario.dia + (i / 48)));
+					tabela[(int)(i % 48)][(int)(horario.dia + (i / 48))] = formatar_nome(var.getName()); 
 				}
 			}
+		} else {
+			System.out.println("Solução não encontrada");
+			return;
 		}
 		
-		System.out.print("Horários      |");
-		for (int dia = 0; dia <6 ; dia++) {
-			if(n_caso==3) {
+		//linha(largura);
+		System.out.print("Horários      | ");
+		String[] dias = {"segunda", "terça", "quarta", "quinta", "sexta", "sábado"};
+		for (int dia = 0; dia < 6; dia++) {
+			int falta = largura;
+			System.out.print(dias[dia]);
+			falta -= dias[dia].length();
+			for (int c = 0; c < falta; c++)
 				System.out.print(" ");
-			}
-			switch(dia) {
-			case 0:
-				System.out.print("    segunda   ");
-				System.out.print(" | ");
-				break;
-			case 1:
-			System.out.print("    terça    ");
 			System.out.print(" | ");
-			break;
-			case 2:
-				System.out.print("    quarta   ");
-				System.out.print(" | ");
-				break;
-			case 3:
-				System.out.print("    quinta   ");
-				System.out.print(" | ");
-				break;
-			case 4:
-				System.out.print("    sexta    ");
-				System.out.print(" | ");
-				break;
-			case 5:
-				System.out.print("    sabado   ");
-				System.out.print(" | ");
-				break;
-			}};
-			
-			System.out.print("\n");
+		}
+		System.out.println("");
+		//linha_barra(largura);
 		for (int hora = 0; hora < 48; hora++) {
 			//linha_barra(largura);
 			
@@ -179,6 +184,7 @@ public class Projeto {
 				System.out.print(" | ");
 			}
 			System.out.println("");
+			//linha_barra(largura);
 		}
 	}
 }
