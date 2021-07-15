@@ -66,6 +66,8 @@ public abstract class Caso extends CSP<Variable, Horario> {
 			if (tarefa != var) {
 				addConstraint(new NotEqualConstraint<>(tarefa, var));
 				addConstraint(new NotEqualConstraint<>(var, tarefa));
+				addConstraint(new RestNome<>(var, tarefa));
+				addConstraint(new RestNome<>(tarefa, var));
 			}
 	}
 	

@@ -33,15 +33,18 @@ public class RestNome<VAR extends Variable, VAL> implements Constraint<VAR, VAL>
 
 	@Override
 	public boolean isSatisfiedWith(Assignment<VAR, VAL> assignment) {
-		if (var1.getName().equals("PIBIC"))
-			return (var2.getName().equals("PIBIT") || var2.getName().equals("PIBIX"));
-		if (var1.getName().equals("PIBIT"))
-			return (var2.getName().equals("PIBIC") || var2.getName().equals("PIBIX"));
+		String nome1 = var1.getName().toUpperCase();
+		String nome2 = var2.getName().toUpperCase();
 		
-		if (var1.getName().equals("EST핯IO"))
-			return (var2.getName().equals("TRABALHO"));
-		if (var1.getName().equals("TRABALHO"))
-			return (var2.getName().equals("EST핯IO"));
+		if (nome1.equals("PIBIC"))
+			return (nome2.equals("PIBIT") || nome2.equals("PIBIX"));
+		if (nome1.equals("PIBIT"))
+			return (nome2.equals("PIBIC") || nome2.equals("PIBIX"));
+		
+		if (nome1.equals("EST핯IO"))
+			return (nome2.equals("TRABALHO"));
+		if (nome1.equals("TRABALHO"))
+			return (nome2.equals("EST핯IO"));
 		
 		return false;
 	}
