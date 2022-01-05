@@ -1,4 +1,4 @@
-# projetoIA
+# ProjetoIA
  UFS-projeto da matéria "Inteligência Artifcial"
     
     Classes usadas num Projeto da Matéria de Inteligência Artificial
